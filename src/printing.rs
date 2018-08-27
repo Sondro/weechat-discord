@@ -1,8 +1,8 @@
-use ffi::Buffer;
+use crate::ffi::Buffer;
 use serenity::model::prelude::*;
 use serenity::CACHE;
 
-use discord::format;
+use crate::discord::format;
 
 // TODO: Rework args
 // TODO: Color things

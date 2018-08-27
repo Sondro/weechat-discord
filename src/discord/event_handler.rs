@@ -1,5 +1,5 @@
-use ffi::Buffer;
-use {buffers, printing, utils};
+use crate::ffi::Buffer;
+use crate::{buffers, printing, utils};
 
 use serenity::model::prelude::*;
 use serenity::prelude::*;

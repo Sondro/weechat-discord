@@ -1,4 +1,4 @@
-use discord::event_handler::{Handler, WeecordEvent};
+use crate::discord::event_handler::{Handler, WeecordEvent};
 
 use serenity::client::bridge::gateway::ShardManager;
 use serenity::prelude::*;

@@ -1,9 +1,9 @@
-use ffi::{self, *};
+use crate::ffi::{self, *};
+use crate::{buffers, discord, discord::DISCORD, plugin_print};
 use std::ptr;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
-use {buffers, discord, discord::DISCORD, plugin_print};
 
 use serenity::model::channel::Channel;
 use serenity::model::id::{ChannelId, GuildId};
@@ -69,13 +69,13 @@ fn handle_buffer_switch(data: SignalHookData) {
 
 #[allow(needless_pass_by_value)]
 fn handle_trigger(_data: SignalHookData) {
-    if let Ok(tx) = ::synchronization::TX.lock() {
+    if let Ok(tx) = crate::synchronization::TX.lock() {
         if let Some(ref tx) = *tx {
             tx.send(()).unwrap();
         }
     }
 
-    if let Ok(tx) = ::synchronization::TX.lock() {
+    if let Ok(tx) = crate::synchronization::TX.lock() {
         if let Some(ref tx) = *tx {
             tx.send(()).unwrap();
         }
@@ -129,12 +129,8 @@ fn handle_query(_buffer: Buffer, command: &str) {
 // TODO: Handle command options
 fn handle_nick(buffer: Buffer, command: &str) {
     let mut substr = command["/nick".len()..].trim().to_owned();
-    let all;
-    // TODO: NLL
-    {
-        let mut split = substr.split(" ");
-        all = split.next() == Some("-all");
-    }
+    let mut split = substr.split(" ");
+    let all = split.next() == Some("-all");
     if all {
         substr = substr["-all".len()..].trim().to_owned();
     }

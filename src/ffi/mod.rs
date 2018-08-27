@@ -155,7 +155,7 @@ impl HDataGetResult for i32 {
 }
 
 pub fn really_bad(message: String) -> ! {
-    ::plugin_print(&format!("Internal error - {}", message));
+    crate::plugin_print(&format!("Internal error - {}", message));
     panic!(message); // hopefully we hit a catch_unwind
 }
 
@@ -435,7 +435,7 @@ fn wrap_panic<R, F: FnOnce() -> R + UnwindSafe>(f: F) -> Option<R> {
                 None => "unknown error",
             };
             let result =
-                catch_unwind(|| ::plugin_print(&format!("Fatal error (caught) - {}", msg)));
+                catch_unwind(|| crate::plugin_print(&format!("Fatal error (caught) - {}", msg)));
             let _ = result; // eat error without logging :(
             None
         }
@@ -459,7 +459,7 @@ pub extern "C" fn wdr_init(argc: c_int, arg_ptr: *const *const c_char) -> c_int 
         }
     }
 
-    match wrap_panic(|| ::init(&args)) {
+    match wrap_panic(|| crate::init(&args)) {
         Some(Some(())) => 0,
         _ => 1,
     }
@@ -468,7 +468,7 @@ pub extern "C" fn wdr_init(argc: c_int, arg_ptr: *const *const c_char) -> c_int 
 #[no_mangle]
 #[allow(unused)]
 pub extern "C" fn wdr_end() -> c_int {
-    match wrap_panic(::end) {
+    match wrap_panic(crate::end) {
         Some(Some(())) => 0,
         _ => 1,
     }
